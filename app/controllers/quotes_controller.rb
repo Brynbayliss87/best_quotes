@@ -28,16 +28,20 @@ class QuotesController < Rulers::Controller
 
   def update
     return unless env["REQUEST_METHOD"] == "POST"
-    req = Rack::Request.new(env)
-    @params = req.params
-    model = "db/quotes/#{@params["id"]}.json"
+    model = "db/quotes/#{params["id"]}.json"
     hash = MultiJson.load("#{File.read(model)}")
     hash.each do |key, value|
-      hash[key] = @params[key] if @params.has_key?(key)
+      hash[key] = params[key] if params.has_key?(key)
     end
     hash = MultiJson.dump(hash)
     File.open(model, "w") do |f|
       f.write(hash)
     end
+  end
+
+  def show
+    p params
+    quote = FileModel.find(params["id"])
+    render :quote, obj: quote
   end
 end
