@@ -40,8 +40,7 @@ class QuotesController < Rulers::Controller
   end
 
   def show
-    p params
     quote = FileModel.find(params["id"])
-    render :quote, obj: quote
+    render_response :quote, obj: quote
   end
 end
